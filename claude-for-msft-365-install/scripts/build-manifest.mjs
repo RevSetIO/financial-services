@@ -135,11 +135,12 @@ const EFFECTS = ["allow", "deny"];
 const RESOURCE_TYPES = ["open_file", "uploaded_file"];
 const STRING_OPS = ["equals", "startsWith", "endsWith"];
 // Mirrors the add-in: a GUID supports only equals | exists (a prefix of a GUID is
-// meaningless); a name supports the string operators too. Other pairings are dropped
-// at runtime, so warn here.
+// meaningless); a name supports the string operators too; a file path supports
+// equals | startsWith. Other pairings are dropped at runtime, so warn here.
 const OPERATORS_BY_TYPE = {
   mip_label_guid: ["equals", "exists"],
   mip_label_name: ["equals", "startsWith", "endsWith", "exists"],
+  file_path: ["equals", "startsWith"],
 };
 
 function validateStatement(st, at) {
@@ -162,6 +163,9 @@ function validateStatement(st, at) {
       problems.push(`${at}.resource.identifiers: empty — the statement will never match; drop \`resource\` to apply everywhere`);
     } else {
       r.identifiers.forEach((id, j) => problems.push(...validateIdentifier(id, `${at}.resource.identifiers[${j}]`)));
+      if (r.type === "uploaded_file" && r.identifiers.some((id) => id?.type === "file_path")) {
+        problems.push(`${at}.resource: file_path never matches an uploaded_file (uploads have no path) — use open_file`);
+      }
     }
   }
   return problems;

@@ -341,9 +341,10 @@ array of allow/deny statements that gates add-in features:
 
 - **No `resource`** — the statement applies everywhere, exactly like a
   `disabled_features` entry (off for everyone).
-- **With a `resource`** — the rule is scoped to matching documents, today
-  identified by Purview sensitivity label (block the add-in entirely on
-  top-secret documents, or refuse attaching restricted Office/PDF files).
+- **With a `resource`** — the rule is scoped to matching documents, identified
+  by Purview sensitivity label or, for the open document, by file path (block
+  the add-in entirely on top-secret documents or on a restricted network share,
+  or refuse attaching restricted Office/PDF files).
 
 It covers everything `disabled_features` does, plus conditions, allowlists, and
 per-statement attribution. Building one usually means fetching label GUIDs
