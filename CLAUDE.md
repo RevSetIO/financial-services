@@ -1,5 +1,7 @@
 # Financial Services Plugins
-hi
+h
+
+testi
 
 Cowork plugins and Claude Managed Agent templates for financial services. Each named agent ships two ways from one source.
 
